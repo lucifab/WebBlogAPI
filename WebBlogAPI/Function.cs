@@ -23,78 +23,101 @@ public class Function
     /// <returns>Task</returns>
     public async Task<object> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        MySQLConnector db = new MySQLConnector();
 
-        Console.WriteLine("Received request: " + JsonConvert.SerializeObject(request));
-
-        string action = null;
-        APIRequest parsedRequest = new APIRequest();
-
-        if (String.IsNullOrEmpty(request.Body)!=true)
+        if (request.HttpMethod == "OPTIONS")
         {
-            parsedRequest = JsonConvert.DeserializeObject<APIRequest>(request.Body);
-        }
-
-        Console.WriteLine(parsedRequest.Action);
-        Console.WriteLine(parsedRequest.Post);
-
-        try
-        {
-            switch (parsedRequest.Action)
-            {
-                case "getPosts":
-                    var posts = await db.GetPostsAsync();
-                    return new APIGatewayProxyResponse
-                    {
-                        StatusCode = 200,
-                        Body = JsonConvert.SerializeObject(posts),
-                        Headers = new Dictionary<string, string>
-                    {
-                        { "Content-Type", "application/json" }
-                    }
-                    };
-                case "pushPost":
-                    await db.PushPostAsync(parsedRequest.Post);
-                    return new APIGatewayProxyResponse
-                    {
-                        StatusCode = 200,
-                        Headers = new Dictionary<string, string>
-                    {
-                        { "Content-Type", "application/json" }
-                    }
-                    };
-                default:
-                    return new APIGatewayProxyResponse
-                    {
-                        StatusCode = 400,
-                        Body = JsonConvert.SerializeObject(new Dictionary<string, string>
-                    {
-                        { "message", "Action not supported" }
-                    }
-                            ),
-                        Headers = new Dictionary<string, string>
-                    {
-                        { "Content-Type", "application/json" }
-                    }
-                    };
-            }
-        }
-        catch (Exception ex)
-        {
+            Console.WriteLine("Received Options Request");
             return new APIGatewayProxyResponse
             {
-                StatusCode = 400,
-                Body = JsonConvert.SerializeObject(new Dictionary<string, string>
-                    {
-                        { "message", ex.Message }
-                    }
-                            ),
+                StatusCode = 200,
                 Headers = new Dictionary<string, string>
                     {
-                        { "Content-Type", "application/json" }
+                        { "Access-Control-Allow-Origin", "*" }, // Allows all origins
+                        { "Access-Control-Allow-Methods", "POST,OPTIONS" }, // Allowed methods
+                        { "Access-Control-Allow-Headers", "Content-Type, Authorization, Access-Control-Allow-Origin" } // Allowed headers
                     }
             };
         }
-        
+        else
+        {
+            MySQLConnector db = new MySQLConnector();
+
+            Console.WriteLine("Received request: " + JsonConvert.SerializeObject(request));
+
+            string action = null;
+            APIRequest parsedRequest = new APIRequest();
+
+            if (String.IsNullOrEmpty(request.Body) != true)
+            {
+                parsedRequest = JsonConvert.DeserializeObject<APIRequest>(request.Body);
+            }
+
+            Console.WriteLine(parsedRequest.Action);
+            Console.WriteLine(parsedRequest.Post);
+
+            try
+            {
+                switch (parsedRequest.Action)
+                {
+                    case "getPosts":
+                        var posts = await db.GetPostsAsync();
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(posts),
+                            Headers = new Dictionary<string, string>
+                    {
+                        { "Content-Type", "application/json" },
+                        { "Access-Control-Allow-Origin", "*" }
+                    }
+                        };
+                    case "pushPost":
+                        await db.PushPostAsync(parsedRequest.Post);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Headers = new Dictionary<string, string>
+                    {
+                        { "Content-Type", "application/json" },
+                        { "Access-Control-Allow-Origin", "*" }
+                    }
+                        };
+                    default:
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 400,
+                            Body = JsonConvert.SerializeObject(new Dictionary<string, string>
+                    {
+                        { "message", "Action not supported" }
+                    }
+                                ),
+                            Headers = new Dictionary<string, string>
+                    {
+                        { "Content-Type", "application/json" },
+                        { "Access-Control-Allow-Origin", "*" }
+                    }
+                        };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = 400,
+                    Body = JsonConvert.SerializeObject(new Dictionary<string, string>
+                    {
+                        { "message", ex.Message }
+                    }
+                                ),
+                    Headers = new Dictionary<string, string>
+                    {
+                        { "Content-Type", "application/json" },
+                        { "Access-Control-Allow-Origin", "*" }
+                    }
+                };
+            }
+
+        }
     }
+
 }

@@ -13,6 +13,7 @@ namespace WebBlogAPI.Class
         public string Content { get; set; }
         public DateTime CreatedAt { get; set; }
         public string AuthorName { get; set; }
+        public string AuthorImageUrl { get; set; }
         public int AuthorId { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

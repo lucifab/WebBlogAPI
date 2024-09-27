@@ -7,6 +7,6 @@ architecture = "x86_64"
 handler = "WebBlogAPI::WebBlogAPI.Function::FunctionHandler"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["WebBlogAPI"]
+functions = ["WebBlog"]
 
 [layer_build_definitions]

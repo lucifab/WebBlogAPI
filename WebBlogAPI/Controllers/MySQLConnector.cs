@@ -45,7 +45,7 @@ namespace WebBlogAPI.Controllers
             using (var connection = new MySqlConnection(connectionString.ConnectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT posts.id,posts.title,posts.content,posts.created_at,posts.updated_at,a.name,a.name as AuthorName,posts.author_id FROM posts " +
+                string query = "SELECT posts.id,posts.title,posts.content,posts.created_at,posts.updated_at,a.name,a.name as AuthorName,a.profile_image,posts.author_id FROM posts " +
                     "INNER JOIN authors a on posts.author_id=a.id";
                 using (var command = new MySqlCommand(query, connection))
                 {
@@ -61,6 +61,7 @@ namespace WebBlogAPI.Controllers
                                 CreatedAt = reader.GetDateTime("created_at"),
                                 UpdatedAt = reader.GetDateTime("updated_at"),
                                 AuthorName = reader.GetString("AuthorName"),
+                                AuthorImageUrl = reader.GetString("profile_image"),
                                 AuthorId = reader.GetInt32("author_id")
                             });
                         }
