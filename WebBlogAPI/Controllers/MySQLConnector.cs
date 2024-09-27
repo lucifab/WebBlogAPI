@@ -13,7 +13,7 @@ namespace WebBlogAPI.Controllers
     {
         MySqlConnectionStringBuilder connectionString = new MySqlConnectionStringBuilder
         {
-            Server = "localhost",//host.docker.internal
+            Server = "host.docker.internal",
             UserID = "apiuser",
             Password = "chikorita",
             Database = "lucifabdev"
