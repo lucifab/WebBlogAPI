@@ -1,0 +1,8 @@
+{
+  "httpMethod": "POST",
+  "path": "http://127.0.0.1:3000",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"Action\":\"pushPost\",\"Post\":{\"Title\":\"Creating a post through API! How fun\",\"Content\":\"My content is here\",\"AuthorId\":\"1\"}}"
+}
