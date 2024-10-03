@@ -1,3 +1,8 @@
+# Local development start
+Under project folder, start docker, and run in cmd `sam local start-api`. Ensure that MySQL80 service with your database is running.
+If you do changes to your project, make sure to use `sam build` first.
+
+
 # AWS Lambda Empty Function Project
 
 This starter project consists of:

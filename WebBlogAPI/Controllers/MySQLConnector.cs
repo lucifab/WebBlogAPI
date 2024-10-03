@@ -46,7 +46,8 @@ namespace WebBlogAPI.Controllers
             {
                 await connection.OpenAsync();
                 string query = "SELECT posts.id,posts.title,posts.content,posts.created_at,posts.updated_at,a.name,a.name as AuthorName,a.profile_image,posts.author_id FROM posts " +
-                    "INNER JOIN authors a on posts.author_id=a.id";
+                    "INNER JOIN authors a on posts.author_id=a.id " +
+                    "ORDER BY posts.updated_at desc";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     using (var reader = command.ExecuteReader())
